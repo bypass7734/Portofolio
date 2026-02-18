@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Data & IA | Abdramane Diallo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6C63FF',
+                        secondary: '#36D1DC',
+                        accent: '#FF6584',
+                        dark: '#0A0A0F',
+                        darker: '#050508',
+                        light: '#F0F0F3',
+                        'light-bg': '#F8FAFC',
+                        'light-text': '#1E293B',
+                        'light-gray': '#64748B',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 8s ease infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'shimmer': 'shimmer 2s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'shine': 'shine 3s ease-in-out infinite',
+                        'ripple': 'ripple 1.5s linear infinite',
+                    },
+                    keyframes: {
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'gradient': {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                        },
+                        'shimmer': {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' },
+                        },
+                        'glow': {
+                            '0%': { filter: 'drop-shadow(0 0 5px currentColor)' },
+                            '100%': { filter: 'drop-shadow(0 0 15px currentColor)' },
+                        },
+                        'shine': {
+                            '0%': { 'background-position': '200% center' },
+                            '100%': { 'background-position': '-200% center' },
+                        },
+                        'ripple': {
+                            '0%': { transform: 'scale(0.8)', opacity: '1' },
+                            '100%': { transform: 'scale(1.5)', opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <!-- DevIcons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6C63FF;
+            --secondary: #36D1DC;
+            --accent: #FF6584;
+            --dark: #0A0A0F;
+            --darker: #050508;
+            --light: #F0F0F3;
+            --neon-blue: #00F3FF;
+            --neon-purple: #9D4EDD;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Mode clair amélioré avec plus de contraste */
+            --light-bg: #F5F7FA;
+            --light-card: #FFFFFF;
+            --light-text: #1A202C;
+            --light-gray: #4A5568;
+            --light-border: #E2E8F0;
+            --light-shadow: rgba(0, 0, 0, 0.08);
+            --light-glass-bg: rgba(255, 255, 255, 0.85);
+            --light-glass-border: rgba(226, 232, 240, 0.8);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.light-mode {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        code, .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .light-mode #three-canvas {
+            opacity: 0.4;
+        }
+
+        /* Navbar améliorée */
+        header {
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 15, 0.98) 0%, 
+                rgba(10, 10, 15, 0.92) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(108, 99, 255, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .light-mode header {
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.98) 0%, 
+                rgba(248, 250, 252, 0.95) 100%);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        header.scrolled {
+            background: rgba(5, 5, 8, 0.98);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        .light-mode header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+        }
+
+        /* Glassmorphism amélioré avec plus de reflets */
+        .glass {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.12) 0%, 
+                rgba(255, 255, 255, 0.06) 50%, 
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.7s ease;
+            z-index: 1;
+        }
+
+        .glass:hover::before {
+            left: 100%;
+        }
+
+        .light-mode .glass {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.92) 0%, 
+                rgba(255, 255, 255, 0.85) 50%, 
+                rgba(255, 255, 255, 0.78) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .glass:hover {
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Cartes de compétences rondes améliorées */
+        .skill-card {
+            position: relative;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, 
+                rgba(20, 20, 30, 0.9) 0%, 
+                rgba(10, 10, 20, 0.8) 50%, 
+                rgba(5, 5, 15, 0.7) 100%);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(108, 99, 255, 0.1);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                0 30px 70px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(108, 99, 255, 0.2);
+            border-color: rgba(108, 99, 255, 0.4);
+        }
+
+        .light-mode .skill-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.98) 0%, 
+                rgba(255, 255, 255, 0.9) 50%, 
+                rgba(255, 255, 255, 0.85) 100%);
+            border: 2px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .skill-card:hover {
+            box-shadow: 
+                0 30px 70px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                0 0 40px rgba(108, 99, 255, 0.1);
+        }
+
+        /* Effet de brillance circulaire */
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                rgba(108, 99, 255, 0.2), 
+                rgba(54, 209, 220, 0.2), 
+                transparent 70%
+            );
+            animation: spin-slow 4s linear infinite;
+            z-index: -1;
+        }
+
+        /* Réflection dynamique */
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at 30% 30%,
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .skill-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Effets de brillance dynamiques améliorés */
+        .skill-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0;
+            transition: all 0.6s ease;
+            z-index: -2;
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+
+        .skill-card:hover .skill-glow {
+            opacity: 0.8;
+            transform: scale(1.2);
+        }
+
+        /* Logo avec effet de brillance */
+        .lang-logo-shadow {
+            filter: drop-shadow(0 0 15px currentColor);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-card:hover .lang-logo-shadow {
+            filter: drop-shadow(0 0 25px currentColor);
+            transform: scale(1.15) rotate(5deg);
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        /* Étoiles dynamiques */
+        .stars i {
+            position: relative;
+            transition: all 0.4s ease;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .stars i:hover {
+            transform: scale(1.4);
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700;
+        }
+
+        .light-mode .stars i {
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Boutons dynamiques améliorés */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 6px 20px rgba(108, 99, 255, 0.4),
+                0 0 20px rgba(108, 99, 255, 0.2);
+            z-index: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 12px 30px rgba(108, 99, 255, 0.5),
+                0 0 30px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.7s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            padding: 2px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.3), 
+                transparent 30%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+        }
+
+        /* Boutons de contrôle améliorés */
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15), 
+                rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px) scale(1.08);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.25), 
+                rgba(255, 255, 255, 0.15));
+            box-shadow: 
+                0 8px 25px rgba(108, 99, 255, 0.4),
+                0 0 20px rgba(108, 99, 255, 0.2);
+            border-color: rgba(108, 99, 255, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(135deg, 
+                rgba(108, 99, 255, 0.6), 
+                rgba(54, 209, 220, 0.6));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .control-btn:hover::before {
+            opacity: 1;
+        }
+
+        .control-btn i {
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .control-btn:hover i {
+            transform: scale(1.15);
+        }
+
+        .light-mode .control-btn {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95), 
+                rgba(255, 255, 255, 0.85));
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            color: var(--light-text);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .light-mode .control-btn:hover {
+            background: white;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.12),
+                0 0 20px rgba(108, 99, 255, 0.1);
+        }
+
+        /* Animation des cartes de compétences */
+        .skill-card-wrapper {
+            opacity: 0;
+            transform: translateY(40px) scale(0.8) rotateX(20deg);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-card-wrapper.animated {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0);
+        }
+
+        /* Typewriter Effect amélioré */
+        .typewriter {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .typewriter::after {
+            content: '|';
+            position: absolute;
+            right: 0;
+            color: var(--neon-blue);
+            animation: blink 0.7s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { opacity: 1 }
+            50% { opacity: 0 }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* Gradient Text amélioré */
+        .gradient-text {
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--accent), 
+                var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 300% 300%;
+            animation: gradient 6s ease infinite;
+        }
+
+        .light-mode .gradient-text {
+            background: linear-gradient(90deg, 
+                #7C3AED, 
+                #3B82F6, 
+                #10B981, 
+                #7C3AED);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Section Spacing */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 80px 0;
+            }
+        }
+
+        /* Timeline améliorée */
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 20px rgba(108, 99, 255, 0.5);
+            z-index: 2;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 19px;
+            width: 3px;
+            height: calc(100% + 21px);
+            background: linear-gradient(180deg, 
+                rgba(108, 99, 255, 0.8), 
+                rgba(54, 209, 220, 0.8), 
+                transparent);
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        /* Navigation améliorée */
+        .nav-link {
+            position: relative;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 0;
+        }
+
+        .light-mode .nav-link {
+            color: rgba(26, 32, 44, 0.8);
+        }
+
+        .nav-link:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+        }
+
+        .light-mode .nav-link:hover {
+            color: var(--light-text);
+        }
+
+        .nav-link.active {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .light-mode .nav-link.active {
+            color: var(--light-text);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(108, 99, 255, 0.5);
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Custom Scrollbar amélioré */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .light-mode ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+        }
+
+        /* Effet de particules sur hover des cartes */
+        .particle-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        /* Responsive amélioré */
+        @media (max-width: 768px) {
+            .typewriter {
+                font-size: 1.5rem;
+            }
+            
+            .timeline-item {
+                padding-left: 30px;
+            }
+            
+            .timeline-item:after {
+                left: 5px;
+            }
+            
+            .controls-container {
+                flex-direction: row;
+                gap: 12px;
+            }
+            
+            .skill-card {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .btn-primary {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .skill-card {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .skill-card .text-3xl {
+                font-size: 1.25rem;
+            }
+            
+            .skill-card .text-lg {
+                font-size: 0.75rem;
+            }
+            
+            .control-btn {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        /* Animations au scroll */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Améliorations mode clair */
+        .light-mode .text-gray-300 {
+            color: #4A5568;
+        }
+
+        .light-mode .text-gray-400 {
+            color: #718096;
+        }
+
+        .light-mode .text-gray-500 {
+            color: #A0AEC0;
+        }
+
+        .light-mode .hover\:bg-white\/5:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .light-mode .hover\:text-white:hover {
+            color: var(--light-text);
+        }
+
+        /* Inputs améliorés */
+        input, textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        .light-mode input,
+        .light-mode textarea {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--light-border);
+            color: var(--light-text);
+        }
+
+        .light-mode input:focus,
+        .light-mode textarea:focus {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        /* Photo de profil avec effets */
+        .profile-pic {
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 
+                0 0 60px rgba(108, 99, 255, 0.4),
+                0 0 100px rgba(108, 99, 255, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .profile-pic::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(45deg, 
+                var(--primary), 
+                var(--secondary), 
+                transparent 70%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 1;
+            animation: spin-slow 8s linear infinite;
+        }
+
+        .profile-pic img {
+            filter: brightness(1.05) contrast(1.1);
+            transition: transform 0.5s ease;
+        }
+
+        .profile-pic:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="fixed w-full z-50 py-4 px-6 md:px-12">
+        <div class="flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl font-bold gradient-text"><span class="text-white dark:text-light-text"></span></span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex space-x-10">
+                <a href="#presentation" class="nav-link">
+                    <span class="lang-fr">Présentation</span>
+                    <span class="lang-en hidden">Presentation</span>
+                </a>
+                <a href="#formation" class="nav-link">
+                    <span class="lang-fr">Formation</span>
+                    <span class="lang-en hidden">Education</span>
+                </a>
+                <a href="#competences" class="nav-link">
+                    <span class="lang-fr">Compétences</span>
+                    <span class="lang-en hidden">Skills</span>
+                </a>
+                <a href="#experience" class="nav-link">
+                    <span class="lang-fr">Expérience</span>
+                    <span class="lang-en hidden">Experience</span>
+                </a>
+                <a href="#projets" class="nav-link">
+                    <span class="lang-fr">Projets</span>
+                    <span class="lang-en hidden">Projects</span>
+                </a>
+                <a href="#contact" class="nav-link">
+                    <span class="lang-fr">Contact</span>
+                    <span class="lang-en hidden">Contact</span>
+                </a>
+            </nav>
+
+            <!-- Contrôles Langue et Thème -->
+            <div class="flex items-center space-x-4 controls-container">
+                <!-- Bouton Télécharger CV (desktop) -->
+                
+                
+                <!-- Bouton Langue -->
+                <button id="language-toggle" class="control-btn" title="Changer la langue">
+                    <i class="fas fa-language"></i>
+                </button>
+                
+                <!-- Bouton Thème -->
+                <button id="theme-toggle" class="control-btn" title="Changer le thème">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <!-- Menu Mobile -->
+                <button id="mobile-menu-button" class="md:hidden control-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden glass rounded-2xl mt-4 p-6 hidden">
+            <div class="flex flex-col space-y-4">
+                <a href="#presentation" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Présentation</span>
+                    <span class="lang-en hidden">Presentation</span>
+                </a>
+                <a href="#formation" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Formation</span>
+                    <span class="lang-en hidden">Education</span>
+                </a>
+                <a href="#competences" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Compétences</span>
+                    <span class="lang-en hidden">Skills</span>
+                </a>
+                <a href="#experience" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Expérience</span>
+                    <span class="lang-en hidden">Experience</span>
+                </a>
+                <a href="#projets" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Projets</span>
+                    <span class="lang-en hidden">Projects</span>
+                </a>
+                <a href="#contact" class="nav-link py-3 px-4 rounded-xl hover:bg-white/5 transition-all">
+                    <span class="lang-fr">Contact</span>
+                    <span class="lang-en hidden">Contact</span>
+                </a>
+                <a href="CV_Abdramane_Diallo_B.pdf" download class="flex items-center justify-center gap-3 px-6 py-3 rounded-full btn-primary">
+                    <i class="fas fa-download"></i>
+                    <span class="lang-fr">Télécharger CV</span>
+                    <span class="lang-en hidden">Download CV</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Présentation -->
+    <section id="presentation" class="min-h-screen flex items-center justify-center px-6 md:px-12 relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-16">
+                <!-- Photo et Informations principales -->
+                <div class="lg:w-2/5 flex justify-center">
+                    <div class="relative">
+                        <!-- Glow Effect -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-secondary blur-3xl opacity-30 animate-float"></div>
+                        
+                        <!-- Photo de profil -->
+                        <div class="relative w-72 h-72 md:w-88 md:h-88 profile-pic">
+                            <img 
+                                src="profil.jpeg" 
+                                alt="Abdramane Diallo"
+                                class="w-full h-full object-cover"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informations personnelles -->
+                <div class="lg:w-3/5 lg:pl-12">
+                    <div class="mb-10">
+                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-fr">Étudiant en B3 Développeur Data & IA</span>
+                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-en hidden">B3 Data & AI Developer Student</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+                            <span class="block">Abdramane Diallo</span>
+                        </h1>
+                        <div class="h-20 mb-8">
+                            <h2 class="typewriter text-3xl md:text-4xl font-bold">
+                                <span id="typewriter-text" class="lang-fr">Développeur Data & IA</span>
+                                <span id="typewriter-text-en" class="lang-en hidden">Data & AI Developer</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="glass rounded-3xl p-10">
+                        <h3 class="text-2xl font-bold mb-8 gradient-text lang-fr">Profil Professionnel</h3>
+                        <h3 class="text-2xl font-bold mb-8 gradient-text lang-en hidden">Professional Profile</h3>
+                        <p class="text-gray-300 mb-6 lang-fr">
+                            Étudiant passionné en B3 Développeur Data & IA, je me spécialise dans la création de solutions intelligentes 
+                            pour résoudre des problèmes complexes. Mon parcours combine une solide formation théorique avec 
+                            des applications pratiques en machine learning, deep learning et data visualization.
+                        </p>
+                        <p class="text-gray-300 mb-6 lang-en hidden">
+                            Passionate B3 Data & AI Developer student, specializing in creating intelligent solutions 
+                            to solve complex problems. My journey combines solid theoretical training with 
+                            practical applications in machine learning, deep learning, and data visualization.
+                        </p>
+                        <p class="text-gray-300 mb-10 lang-fr">
+                            Je recherche actuellement un stage de fin d'études de
+4 à 6 mois avec un démarrage immédiat, dans le domaine de la Data Science ou de l'Intelligence 
+                            Artificielle pour mettre en pratique mes compétences et contribuer à des projets innovants.
+                        </p>
+                        <p class="text-gray-300 mb-10 lang-en hidden">
+                            I am currently looking for a 4 to 6-month end-of-study internship in Data Science or Artificial Intelligence, starting immediately, to apply my skills and contribute to innovative projects.
+                        </p>
+                        
+                        <!-- Boutons d'action -->
+                        <div class="flex flex-wrap gap-5 items-center">
+                            <a href="#contact" class="btn-primary">
+                                <span class="lang-fr">Me contacter</span>
+                                <span class="lang-en hidden">Contact Me</span>
+                            </a>
+                            <a href="CV_Abdramane_Diallo_B.pdf" download class="px-8 py-3.5 rounded-full glass text-white font-semibold hover:bg-white/10 transition-all duration-300 flex items-center gap-3">
+                                <i class="fas fa-download"></i>
+                                <span class="lang-fr">Télécharger CV</span>
+                                <span class="lang-en hidden">Download CV</span>
+                            </a>
+                            <div class="flex items-center space-x-5">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center glass">
+                                    <i class="fas fa-map-marker-alt text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 text-sm lang-fr">Localisation</div>
+                                    <div class="text-gray-400 text-sm lang-en hidden">Location</div>
+                                    <div class="font-medium">Paris, France</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <div class="w-8 h-14 rounded-full glass flex items-start justify-center p-2.5">
+                <div class="w-1.5 h-5 bg-gradient-to-b from-primary to-secondary rounded-full animate-bounce-slow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Formation -->
+    <section id="formation" class="relative">
+        <div class="container mx-auto px-6 md:px-12">
+            
+                <div class="flex items-center mb-12">
+                    <div class="w-16 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mr-5"></div>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-fr">Formation</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-en hidden">Education</h2>
+                </div>
+                
+                <!-- Timeline des formations -->
+                <div class="space-y-10">
+                    <!-- Formation 1 -->
+                    <div class="timeline-item reveal-on-scroll">
+                        <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Bachelor 3 Développeur Data & IA</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">B3 Data & AI Developer</h3>
+                                    <div class="flex items-center text-gray-400 mb-3">
+                                        <i class="fas fa-university mr-3"></i>
+                                        <span class="lang-fr">École centrale d'électronique (ECE) Paris - France</span>
+                                        <span class="lang-en hidden">Central School of Electronics (ECE) Paris - France</span>
+                                    </div>
+                                </div>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0 lang-fr">Depuis Octobre 2025 - Présent</span>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0 lang-en hidden">Since October 2025 - Present</span>
+                            </div>
+                            <p class="text-gray-300 mb-6 lang-fr">
+                                Formation spécialisée en Data Science et Intelligence Artificielle avec des modules avancés en :
+                            </p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">
+                                Specialized training in Data Science and Artificial Intelligence with advanced modules in:
+                            </p>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Data Science : Machine Learning, Deep Learning, Réseaux de neurones, Statistiques avancées.</span>
+                                    <span class="lang-en hidden">Data Science: Machine Learning, Deep Learning, Neural Networks, Advanced Statistics</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Ingénierie de données : Big Data, Python, R, Visualisation de données</span>
+                                    <span class="lang-en hidden">Data Engineering: Big Data, Python, R, Data Visualization</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Gestion & Management : Méthodes agiles (Scrum), Gestion de projets, Finance</span>
+                                    <span class="lang-en hidden">Management & Business: Agile Methodologies, Project Management, Finance</span>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Formation 2 -->
+                    <div class="timeline-item reveal-on-scroll">
+                        <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">DUT Informatique (Gestion des Entreprises) Diplôme Universitaire de Technologie</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Associate Degree in Computer Science & Business Management Higher National Diploma (DUT)</h3>
+                                    <div class="flex items-center text-gray-400 mb-3">
+                                        <i class="fas fa-university mr-3"></i>
+                                        <span class="lang-fr">Ecole Rationnelle Privée d'Informatique et d'Electronique (ERPIE) - Bamako - Mali</span>
+                                        <span class="lang-en hidden">Private Rational School of Computing and Electronics (ERPIE) - Bamako - Mali</span>
+                                    </div>
+                                </div>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">2023 - 2025</span>
+                            </div>
+                            <p class="text-gray-300 mb-6 lang-fr">
+                                Formation générale en informatique avec des bases solides en :
+                            </p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">
+                                General computer training with solid foundations in:
+                            </p>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Développement logiciel</span>
+                                    <span class="lang-en hidden">Software development</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Bases de données et SQL</span>
+                                    <span class="lang-en hidden">Databases and SQL</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Algorithmique avancée</span>
+                                    <span class="lang-en hidden">Advanced algorithms</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Architecture des systèmes</span>
+                                    <span class="lang-en hidden">System architecture</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Mathématiques appliquées, Bases de données</span>
+                                    <span class="lang-en hidden">Applied Mathematics & Databases</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Business : Gestion comptable, Analyse financière, Économie d'entreprise</span>
+                                    <span class="lang-en hidden">Business Intelligence: Accounting, Financial Analysis, Corporate Economics.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Formation 3 -->
+                    <div class="timeline-item reveal-on-scroll">
+                        <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Baccalauréat Sciencetifiques</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Scientific Baccalaureate</h3>
+                                    <div class="flex items-center text-gray-400 mb-3">
+                                        <i class="fas fa-school mr-3"></i>
+                                        <span class="lang-fr">Lycée Abdou Ballo</span>
+                                        <span class="lang-en hidden">Abdou Ballo School - Bamako - Mali</span>
+                                    </div>
+                                </div>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">2022 - 2023</span>
+                            </div>
+                             <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Sciences : Mathématiques, Physique-Chimie, SVT, Informatique</span>
+                                    <span class="lang-en hidden">Sciences: Mathematics, Physics & Chemistry, Life & Earth Sciences, Computer Science</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Lettres : Philosophie, Français, Histoire-Géographie</span>
+                                    <span class="lang-en hidden">Humanities: Philosophy, History & Geography</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-secondary mr-3"></i>
+                                    <span class="lang-fr">Langues : Anglais, Français</span>
+                                    <span class="lang-en hidden">Languages: English, French</span>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </section>
+
+    
+
+    <!-- Section Expérience -->
+    <section id="experience" class="relative">
+        <div class="container mx-auto px-6 md:px-12">
+            
+                <div class="flex items-center mb-12">
+                    <div class="w-16 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mr-5"></div>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-fr">Expérience Professionnelle</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-en hidden">Professional Experience</h2>
+                </div>
+                
+                <!-- Timeline des expériences -->
+                <div class="space-y-10">
+                    <!-- Expérience 1 -->
+                    <div class="timeline-item reveal-on-scroll">
+                        <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Stage Data Analyst</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Data Analyst Intern</h3>
+                                    <div class="flex items-center text-gray-400 mb-3">
+                                        <i class="fas fa-building mr-3"></i>
+                                        <span class="lang-fr">AFG Assurances - Bamako - Mali</span>
+                                        <span class="lang-en hidden">AFG Assurances - Bamako - Mali</span>
+                                    </div>
+                                </div>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Février 2025 - Juin 2025</span>
+                            </div>
+                            <p class="text-gray-300 mb-6 lang-fr">Stage de 5 mois</p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">5-month internship</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Analyse de Sinistralité : Exploration des données clients, primes et sinistres pour identifier les tendances de marché et les facteurs de risque</span>
+                                    <span class="lang-en hidden">Claims Analysis: In-depth exploration of customer data, premiums, and claims to identify market trends and emerging risk factors</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Modélisation Statistique : Développement de modèles prédictifs pour l'estimation des provisions techniques et l'anticipation des comportements assurés.</span>
+                                    <span class="lang-en hidden">Statistical Modeling: Designed and developed predictive models to estimate technical reserves and anticipate policyholder behavior</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Évaluation de la Performance : Optimisation de la fiabilité des modèles via des métriques rigoureuses (Précision, Rappel, F1-score).</span>
+                                    <span class="lang-en hidden">Performance Evaluation: Monitored model reliability using rigorous accuracy metrics (Precision, Recall, F1-score) to ensure forecast integrity.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Data Visualisation : Création de tableaux de bord interactifs (Power BI) pour le suivi des indicateurs clés de performance (KPI).</span>
+                                    <span class="lang-en hidden">Data Visualization: Designed and deployed interactive Power BI dashboards to translate complex data into visual Key Performance Indicators (KPIs).</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Aide à la Décision : Traduction d'analyses complexes en recommandations stratégiques pour la direction afin d'optimiser la rentabilité.</span>
+                                    <span class="lang-en hidden">Decision Support: Interpreted statistical analyses to provide strategic recommendations to executive management and optimize profitability.</span>
+                                </li>
+                            </ul>
+                            <div class="flex flex-wrap gap-3 mt-6">
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Python</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Scikit-learn</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">SQL</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Power BI</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Expérience 2 -->
+                    <div class="timeline-item reveal-on-scroll">
+                        <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Développeur Web Full-Stack</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Full-Stack Web Developer</h3>
+                                    <div class="flex items-center text-gray-400 mb-3">
+                                        <i class="fas fa-building mr-3"></i>
+                                        <span class="lang-fr">OuagadouSoft - Bamako - Mali</span>
+                                        <span class="lang-en hidden">OuagadouSoft - Bamako - Mali</span>
+                                    </div>
+                                </div>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Mars 2023 - Août 2023</span>
+                            </div>
+                            <p class="text-gray-300 mb-6 lang-fr">Stage de 5 mois en développement web</p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">5-month web development internship</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Développement d'une application web</span>
+                                    <span class="lang-en hidden">Web application development</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Implémentation d'algorithmes de recommandation basiques</span>
+                                    <span class="lang-en hidden">Implementation of basic recommendation algorithms</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Implémentation de fonctionnalités back-end API (logique métier)</span>
+                                    <span class="lang-en hidden">Implementation of back-end API features (business logic)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
+                                    <span class="lang-fr">Optimisation des performances de la base de données</span>
+                                    <span class="lang-en hidden">Database performance optimization</span>
+                                </li>
+                            </ul>
+                            <div class="flex flex-wrap gap-3 mt-6">
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">JavaScript</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">React</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Node.js</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">MySQL</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Power BI</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </section>
+
+
+    <!-- Section Compétences -->
+    <section id="competences" class="relative">
+        <div class="container mx-auto px-6 md:px-12">
+            
+                <div class="flex items-center mb-12">
+                    <div class="w-16 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mr-5"></div>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-fr">Compétences</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-en hidden">Skills</h2>
+                </div>
+                
+                <!-- Langages de Programmation avec cartes rondes -->
+                <div class="mb-20">
+    <h3 class="text-3xl font-bold mb-12 gradient-text lang-fr">Langages de Programmation</h3>
+    <h3 class="text-3xl font-bold mb-12 gradient-text lang-en hidden">Programming Languages</h3>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-16 gap-x-10 justify-items-center">
+        
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-blue-500/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo mb-1">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" class="w-12 h-12">
+                </div>
+                <span class="lang-name font-semibold text-sm">C</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-blue-600/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo mb-1">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" class="w-12 h-12">
+                </div>
+                <span class="lang-name font-semibold text-sm">C++</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-blue-400/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110 border-2 border-blue-400/30">
+                <div class="lang-logo mb-1">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="w-12 h-12">
+                </div>
+                <span class="lang-name font-semibold text-sm">Python</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-yellow-500/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo mb-1">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS" class="w-12 h-12">
+                </div>
+                <span class="lang-name font-semibold text-sm">JavaScript</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-purple-600/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo mb-1">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="w-12 h-12">
+                </div>
+                <span class="lang-name font-semibold text-sm">PHP</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-blue-700/40 w-24 h-24 rounded-full absolute -top-2 group-hover:animate-pulse-slow"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo mb-1" style="color: #4479A1;">
+                    <i class="fas fa-database text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm">SQL</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+    </div>
+</div>
+                
+                <div class="mb-20">
+    <h3 class="text-3xl font-bold mb-12 gradient-text lang-fr">Frameworks & Outils</h3>
+    <h3 class="text-3xl font-bold mb-12 gradient-text lang-en hidden">Frameworks & Tools</h3>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-16 gap-x-10 justify-items-center">
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-orange-500/40 w-24 h-24 rounded-full group-hover:animate-pulse-slow absolute -top-2" style="animation-delay: 0.2s;"></div>
+            
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transform transition-transform group-hover:scale-110">
+                <div class="lang-logo lang-logo-shadow" style="color: #E97627;">
+                    <i class="fas fa-chart-bar text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2">Tableau</span>
+            </div>
+
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-yellow-500/40 w-24 h-24 rounded-full absolute -top-2" style="animation-delay: 0.3s;"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo" style="color: #F2C811;">
+                    <i class="fas fa-chart-pie text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2">Power BI</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-orange-700/40 w-24 h-24 rounded-full absolute -top-2"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-center flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo" style="color: #FF6F00;">
+                    <i class="devicon-tensorflow-original text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2">TensorFlow</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-orange-600/40 w-24 h-24 rounded-full absolute -top-2"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo" style="color: #F7931E;">
+                    <i class="fab fa-python text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2 text-center">Scikit-learn</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-purple-900/40 w-24 h-24 rounded-full absolute -top-2"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo" style="color: #150458;">
+                    <i class="fas fa-database text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2">Pandas</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+        <div class="skill-card-wrapper relative group flex flex-col items-center">
+            <div class="skill-glow bg-red-500/40 w-24 h-24 rounded-full absolute -top-2"></div>
+            <div class="skill-card w-32 h-32 rounded-full flex flex-col items-center justify-center p-4 relative z-10 glass mb-4 transition-transform group-hover:scale-110">
+                <div class="lang-logo" style="color: #F05032;">
+                    <i class="devicon-git-plain text-4xl"></i>
+                </div>
+                <span class="lang-name font-semibold text-sm mt-2">Git</span>
+            </div>
+            <div class="stars text-yellow-400 text-xs flex gap-1">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+        </div>
+
+    </div>
+</div>
+                
+                <!-- Compétences transversales -->
+                <div>
+                    <h3 class="text-3xl font-bold mb-12 gradient-text lang-fr">Compétences Transversales</h3>
+                    <h3 class="text-3xl font-bold mb-12 gradient-text lang-en hidden">Soft Skills</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div class="glass rounded-2xl p-10 text-center transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/30 reveal-on-scroll">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-primary/25 to-secondary/25 flex items-center justify-center mx-auto mb-8 glass">
+                                <i class="fas fa-users text-4xl text-secondary"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-6 lang-fr">Travail d'équipe</h4>
+                            <h4 class="text-2xl font-bold mb-6 lang-en hidden">Teamwork</h4>
+                            <p class="text-gray-400 lang-fr">Expérience en projets collaboratifs et gestion d'équipe</p>
+                            <p class="text-gray-400 lang-en hidden">Experience in collaborative projects and team management</p>
+                        </div>
+                        <div class="glass rounded-2xl p-10 text-center transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/30 reveal-on-scroll">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-primary/25 to-secondary/25 flex items-center justify-center mx-auto mb-8 glass">
+                                <i class="fas fa-lightbulb text-4xl text-secondary"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-6 lang-fr">Résolution de problèmes</h4>
+                            <h4 class="text-2xl font-bold mb-6 lang-en hidden">Problem Solving</h4>
+                            <p class="text-gray-400 lang-fr">Approche analytique et créative pour résoudre des défis complexes</p>
+                            <p class="text-gray-400 lang-en hidden">Analytical and creative approach to solving complex challenges</p>
+                        </div>
+                        <div class="glass rounded-2xl p-10 text-center transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/30 reveal-on-scroll">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-primary/25 to-secondary/25 flex items-center justify-center mx-auto mb-8 glass">
+                                <i class="fas fa-comments text-4xl text-secondary"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-6 lang-fr">Communication</h4>
+                            <h4 class="text-2xl font-bold mb-6 lang-en hidden">Communication</h4>
+                            <p class="text-gray-400 lang-fr">Présentation claire de concepts techniques à divers publics</p>
+                            <p class="text-gray-400 lang-en hidden">Clear presentation of technical concepts to diverse audiences</p>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </section>
+
+    <!-- Section Projets -->
+    <section id="projets" class="relative">
+        <div class="container mx-auto px-6 md:px-12">
+            
+                <div class="flex items-center mb-12">
+                    <div class="w-16 h-1.5 bg-gradient-to-r from-primary to-secondary rounded-full mr-5"></div>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-fr">Projets personnels récents</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold lang-en hidden">Recent Personal Projects</h2>
+                </div>
+                <!--projet 1--> 
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="glass rounded-2xl overflow-hidden group cursor-pointer transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/40 reveal-on-scroll">
+                <div class="relative h-56 overflow-hidden rounded-t-2xl"> 
+                    <img src="ML.jpg" alt="Machine Learning Project" 
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 opacity-60 transition-opacity group-hover:opacity-40"></div>
+
+                    <div class="absolute top-5 right-5 flex gap-2">
+                        <span class="px-4 py-1.5 rounded-full glass text-sm lang-fr text-white">Machine Learning</span>
+                        <span class="px-4 py-1.5 rounded-full glass text-sm lang-en hidden text-white">Machine Learning</span>
+                    </div>
+                </div>
+    
+
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold mb-2 lang-fr">Classification d'Images par Vision par Ordinateur</h3>
+                    <h3 class="text-2xl font-bold mb-2 lang-en hidden">Computer Vision & Image Classification</h3>
+                    
+
+                    <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-fr">
+                        Développement d’un système de classification sur un dataset de 6 000+ images, incluant l'extraction automatisée (API Kaggle), l'ingénierie de caractéristiques morphologiques (HOG) et l'entraînement de modèles SVM optimisés.
+                    </p>
+                    <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-en hidden">
+                        Developed a classification system for a dataset of 6,000+ images, featuring automated data extraction (Kaggle API), morphological feature engineering (HOG), and training of optimized SVM models.
+                    </p>
+
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Python</span>
+                            <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">OpenCV</span>
+                            <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Scikit-learn</span>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <a href="https://github.com/AbdramaneDiallo777/pokemon-classification-svm-main" target="_blank" class="github-btn">
+                                <i class="fab fa-github mr-2"></i>
+                                <span class="lang-fr">Voir le projet</span>
+                                <span class="lang-en hidden">View project</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                /* À placer idéalement dans ton fichier CSS global */
+                .github-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    background-color: #24292e;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 0.875rem;
+                    transition: all 0.3s ease;
+                }
+
+                .github-btn:hover {
+                    transform: scale(1.05);
+                    background-color: #444d56;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                }
+            </style>
+                    <!--projet 2--> 
+                    <div class="glass rounded-2xl overflow-hidden group cursor-pointer transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-accent/40 reveal-on-scroll">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="lang.jpg" alt="NLP Project" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-br from-accent/20 to-purple-900/40 opacity-60"></div>
+
+                        <div class="absolute top-5 right-5">
+                            <span class="px-4 py-1.5 rounded-full glass text-sm text-white">NLP & Fullstack</span>
+                        </div>
+                    </div>
+
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-4 lang-fr">Plateforme d'Avis Clients (NLP)</h3>
+                        <h3 class="text-2xl font-bold mb-4 lang-en hidden">Sentiment Analysis Platform</h3>
+
+                        <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-fr">
+                            Développement d’une solution fullstack permettant de traiter les commentaires clients pour évaluer automatiquement la satisfaction via l’analyse de la polarité. Intégration d'un moteur NLP Python avec une architecture robuste sous Laravel et Vue 3.
+                        </p>
+                        
+                        <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-en hidden">
+                            Developed a fullstack solution to process customer feedback and assess satisfaction through polarity analysis. Integrated a Python NLP engine with a robust Laravel 12 and Vue 3 architecture.
+                        </p>
+
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Laravel 12</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Vue 3</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Python (NLP)</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Sanctum</span>
+                            </div>
+
+                            <div class="pt-2">
+                                <a href="https://github.com/AbdramaneDiallo777/analyse-ia-backend" target="_blank" class="github-btn">
+                                    <i class="fab fa-github mr-2"></i>
+                                    <span class="lang-fr">Voir le projet</span>
+                                    <span class="lang-en hidden">View project</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    /* À inclure une seule fois dans votre fichier CSS principal */
+                    .github-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        background-color: #24292e;
+                        color: white;
+                        padding: 10px 22px;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                    }
+                    .github-btn:hover {
+                        transform: scale(1.05);
+                        background-color: #444d56;
+                    }
+                </style>
+                    <!--projet 3--> 
+                   <div class="glass rounded-2xl overflow-hidden group cursor-pointer transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-green-500/40 reveal-on-scroll">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="data.jpg" alt="Data Engineering Project" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+
+                        <div class="absolute top-5 right-5">
+                            <span class="px-4 py-1.5 rounded-full glass text-sm text-white">Data Engineering</span>
+                        </div>
+                    </div>
+
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-4 lang-fr">Engineering & Visualisation des Ventes</h3>
+                        <h3 class="text-2xl font-bold mb-4 lang-en hidden">Sales Engineering & Visualization</h3>
+
+                        <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-fr">
+                            Développement d'un pipeline ETL et d'un dashboard interactif pour l'analyse de 10 000 transactions. Inclut le nettoyage de données complexes, la segmentation des comportements d'achat et le suivi des indicateurs de rentabilité.
+                        </p>
+                        
+                        <p class="text-gray-300 mb-6 text-sm leading-relaxed lang-en hidden">
+                            Developed an end-to-end ETL pipeline and an interactive dashboard to analyze 10,000 transactions, featuring complex data cleaning, customer behavior segmentation, and real-time profitability KPI tracking.
+                        </p>
+
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Python</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">SQL</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Dash</span>
+                                <span class="text-xs text-gray-400 px-3 py-1.5 rounded glass">Plotly</span>
+                            </div>
+
+                            <div class="pt-2">
+                                <a href="https://github.com/AbdramaneDiallo777/Data-Engineering-Visualisation" target="_blank" class="github-btn">
+                                    <i class="fab fa-github mr-2"></i>
+                                    <span class="lang-fr">Voir le projet</span>
+                                    <span class="lang-en hidden">View project</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </section>
+
+    <!-- Section Contact -->
+    <section id="contact" class="relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="glass rounded-3xl p-10 md:p-14 max-w-5xl mx-auto">
+                <div class="text-center mb-14">
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6">Contact</h2>
+                    <p class="text-gray-400 text-lg lang-fr">Disponible pour des opportunités de stage et projets</p>
+                    <p class="text-gray-400 text-lg lang-en hidden">Available for internship and project opportunities</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-8 gradient-text lang-fr">Informations de contact</h3>
+                        <h3 class="text-3xl font-bold mb-8 gradient-text lang-en hidden">Contact Information</h3>
+                        <div class="space-y-8">
+                            <div class="flex items-center space-x-5">
+                                <div class="w-14 h-14 rounded-full glass flex items-center justify-center">
+                                    <i class="fas fa-envelope text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400">Email</div>
+                                    <div class="font-medium text-lg">abdramane.diallo@edu.ece.fr</div>
+                                </div>
+                            </div>
+                        
+                            <div class="flex items-center space-x-5">
+                                <div class="w-14 h-14 rounded-full glass flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 lang-fr">Localisation</div>
+                                    <div class="text-gray-400 lang-en hidden">Location</div>
+                                    <div class="font-medium text-lg">Paris, France</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-12">
+                            <h4 class="text-2xl font-bold mb-6 lang-fr">Réseaux sociaux</h4>
+                            <h4 class="text-2xl font-bold mb-6 lang-en hidden">Social Networks</h4>
+                            <div class="flex space-x-5">
+                                <a href="https://github.com" target="_blank" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
+                                    <i class="devicon-github-plain text-2xl"></i>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
+                                    <i class="devicon-linkedin-plain text-2xl"></i>
+                                </a>
+                                <a href="https://kaggle.com" target="_blank" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
+                                    <i class="devicon-kaggle-plain text-2xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <form id="contact-form" class="space-y-8">
+                            <div>
+                                <label class="block text-gray-400 mb-3 lang-fr">Nom complet *</label>
+                                <label class="block text-gray-400 mb-3 lang-en hidden">Full name *</label>
+                                <input type="text" required class="w-full px-5 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Votre nom">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-3">Email *</label>
+                                <input type="email" required class="w-full px-5 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="votre@email.com">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-3 lang-fr">Sujet</label>
+                                <label class="block text-gray-400 mb-3 lang-en hidden">Subject</label>
+                                <input type="text" class="w-full px-5 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Sujet de votre message">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-3 lang-fr">Message *</label>
+                                <label class="block text-gray-400 mb-3 lang-en hidden">Message *</label>
+                                <textarea rows="5" required class="w-full px-5 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Décrivez votre projet..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full btn-primary py-4 text-lg">
+                                <i class="fas fa-paper-plane mr-3"></i>
+                                <span class="lang-fr">Envoyer le message</span>
+                                <span class="lang-en hidden">Send message</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center">
+        <div class="container mx-auto px-6">
+            <div class="glass rounded-3xl p-10 mb-10">
+                <h3 class="text-3xl font-bold mb-6 lang-fr">Disponible pour des opportunités</h3>
+                <h3 class="text-3xl font-bold mb-6 lang-en hidden">Available for opportunities</h3>
+                <p class="text-gray-400 mb-8 text-lg lang-fr">Je recherche un stage de fin d'études en Data Science ou Intelligence Artificielle</p>
+                <p class="text-gray-400 mb-8 text-lg lang-en hidden">I am looking for an end-of-study internship in Data Science or Artificial Intelligence</p>
+                <div class="flex flex-wrap justify-center gap-5">
+                    <a href="#contact" class="btn-primary px-10">
+                        <span class="lang-fr">Me contacter</span>
+                        <span class="lang-en hidden">Contact me</span>
+                    </a>
+                    <a href="CV_Abdramane_Diallo_B.pdf" download class="px-10 py-4 rounded-full glass text-white font-semibold hover:bg-white/10 transition-all duration-300 flex items-center gap-3">
+                        <i class="fas fa-download"></i>
+                        <span class="lang-fr">Télécharger CV</span>
+                        <span class="lang-en hidden">Download CV</span>
+                    </a>
+                </div>
+            </div>
+            <p class="text-gray-400">© <span id="current-year">2026</span> Abdramane Diallo - Portfolio Data & IA. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Back to top button amélioré -->
+    <button id="back-to-top" class="fixed bottom-10 right-10 w-14 h-14 rounded-full glass flex items-center justify-center z-50 opacity-0 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-primary/40">
+        <i class="fas fa-chevron-up text-secondary text-xl"></i>
+    </button>
+
+    <script>
+        // Three.js Particle System amélioré
+        class ParticleSystem {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: document.getElementById('three-canvas'),
+                    alpha: true,
+                    antialias: true 
+                });
+                
+                this.particles = null;
+                this.mouse = { x: 0, y: 0 };
+                this.mouseStrength = 0.02;
+                this.initialize();
+            }
+            
+            initialize() {
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.camera.position.z = 25;
+                
+                const particleCount = 2500;
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const radius = 18 + Math.random() * 7;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    
+                    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+                    positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                    positions[i * 3 + 2] = radius * Math.cos(phi);
+                    
+                    colors[i * 3] = 0.4 + Math.random() * 0.3;
+                    colors[i * 3 + 1] = 0.1 + Math.random() * 0.3;
+                    colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
+                }
+                
+                const geometry = new THREE.BufferGeometry();
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                const material = new THREE.PointsMaterial({
+                    size: 0.12,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.7,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                this.particles = new THREE.Points(geometry, material);
+                this.scene.add(this.particles);
+                
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+                this.scene.add(ambientLight);
+                
+                const pointLight = new THREE.PointLight(0x6C63FF, 1.5, 150);
+                pointLight.position.set(15, 15, 15);
+                this.scene.add(pointLight);
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
+                
+                window.addEventListener('resize', () => this.onWindowResize());
+                this.animate();
+            }
+            
+            onWindowResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                if (this.particles) {
+                    this.particles.rotation.x += 0.0015;
+                    this.particles.rotation.y += 0.0025;
+                    this.particles.rotation.y += this.mouse.x * this.mouseStrength;
+                    this.particles.rotation.x += this.mouse.y * this.mouseStrength;
+                    
+                    const positions = this.particles.geometry.attributes.position.array;
+                    for (let i = 0; i < positions.length; i += 3) {
+                        positions[i + 1] += Math.sin(Date.now() * 0.001 + i) * 0.002;
+                    }
+                    this.particles.geometry.attributes.position.needsUpdate = true;
+                }
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+        
+        // Typewriter Effect amélioré
+        class TypeWriter {
+            constructor() {
+                this.textsFr = [
+                    "Développeur Data & IA",
+                    "Spécialiste Machine Learning", 
+                    "Data Scientist",
+                    "Deep Learning Engineer",
+                    "AI Solutions Architect"
+                ];
+                this.textsEn = [
+                    "Data & AI Developer",
+                    "Machine Learning Specialist",
+                    "Data Scientist",
+                    "Deep Learning Engineer",
+                    "AI Solutions Architect"
+                ];
+                this.currentText = 0;
+                this.currentChar = 0;
+                this.isDeleting = false;
+                this.typeSpeed = 100;
+                this.deleteSpeed = 50;
+                this.pauseTime = 1500;
+                this.startTyping();
+            }
+            
+            startTyping() {
+                const type = () => {
+                    const isFrench = !document.body.classList.contains('english-mode');
+                    const texts = isFrench ? this.textsFr : this.textsEn;
+                    const textElement = isFrench ? 
+                        document.getElementById('typewriter-text') : 
+                        document.getElementById('typewriter-text-en');
+                    
+                    const current = texts[this.currentText];
+                    
+                    if (this.isDeleting) {
+                        textElement.textContent = current.substring(0, this.currentChar - 1);
+                        this.currentChar--;
+                        this.typeSpeed = this.deleteSpeed;
+                    } else {
+                        textElement.textContent = current.substring(0, this.currentChar + 1);
+                        this.currentChar++;
+                        this.typeSpeed = 100;
+                    }
+                    
+                    if (!this.isDeleting && this.currentChar === current.length) {
+                        this.isDeleting = true;
+                        this.typeSpeed = this.pauseTime;
+                    } else if (this.isDeleting && this.currentChar === 0) {
+                        this.isDeleting = false;
+                        this.currentText = (this.currentText + 1) % texts.length;
+                        this.typeSpeed = 500;
+                    }
+                    
+                    setTimeout(type, this.typeSpeed);
+                };
+                
+                type();
+            }
+        }
+        
+        // Portfolio Manager
+        class PortfolioManager {
+            constructor() {
+                this.currentLanguage = 'fr';
+                this.currentTheme = 'dark';
+                this.init();
+            }
+            
+            init() {
+                this.particleSystem = new ParticleSystem();
+                this.typewriter = new TypeWriter();
+                
+                this.setupEventListeners();
+                this.initAnimations();
+                
+                document.getElementById('current-year').textContent = new Date().getFullYear();
+                this.initNavbarScroll();
+                this.initSectionHighlighting();
+                this.animateSkillCards();
+                this.initRevealOnScroll();
+            }
+            
+            setupEventListeners() {
+                // Mobile menu
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.querySelector('i').classList.toggle('fa-bars');
+                    mobileMenuButton.querySelector('i').classList.toggle('fa-times');
+                });
+                
+                document.querySelectorAll('#mobile-menu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.querySelector('i').classList.remove('fa-times');
+                        mobileMenuButton.querySelector('i').classList.add('fa-bars');
+                    });
+                });
+                
+                // Smooth scrolling
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            window.scrollTo({
+                                top: target.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+                
+                // Back to top
+                const backToTopButton = document.getElementById('back-to-top');
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        backToTopButton.style.opacity = '1';
+                        backToTopButton.style.pointerEvents = 'auto';
+                    } else {
+                        backToTopButton.style.opacity = '0';
+                        backToTopButton.style.pointerEvents = 'none';
+                    }
+                });
+                
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+                
+                // Contact form
+                const contactForm = document.getElementById('contact-form');
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const inputs = contactForm.querySelectorAll('input[required], textarea[required]');
+                    let isValid = true;
+                    
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.style.borderColor = '#FF6584';
+                            input.style.boxShadow = '0 0 0 3px rgba(255, 101, 132, 0.2)';
+                        } else {
+                            input.style.borderColor = '';
+                            input.style.boxShadow = '';
+                        }
+                    });
+                    
+                    if (isValid) {
+                        const button = contactForm.querySelector('button');
+                        const originalText = button.innerHTML;
+                        
+                        const successTextFr = '<i class="fas fa-check mr-3"></i> Message envoyé !';
+                        const successTextEn = '<i class="fas fa-check mr-3"></i> Message sent!';
+                        const isFrench = this.currentLanguage === 'fr';
+                        
+                        button.innerHTML = isFrench ? successTextFr : successTextEn;
+                        button.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+                        button.disabled = true;
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.style.background = '';
+                            button.disabled = false;
+                            contactForm.reset();
+                        }, 3000);
+                    }
+                });
+                
+                // Language toggle
+                document.getElementById('language-toggle').addEventListener('click', () => {
+                    this.toggleLanguage();
+                });
+                
+                // Theme toggle
+                document.getElementById('theme-toggle').addEventListener('click', () => {
+                    this.toggleTheme();
+                });
+                
+                // Hover effects for skill cards
+                document.querySelectorAll('.skill-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        gsap.to(card, {
+                            scale: 1.1,
+                            duration: 0.4,
+                            ease: 'back.out(1.7)'
+                        });
+                        
+                        // Create particle effect
+                        this.createParticleEffect(card);
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        gsap.to(card, {
+                            scale: 1,
+                            duration: 0.4,
+                            ease: 'power2.out'
+                        });
+                    });
+                });
+                
+                // Window resize handler
+                window.addEventListener('resize', this.handleResize.bind(this));
+            }
+            
+            toggleLanguage() {
+                const isFrench = this.currentLanguage === 'fr';
+                this.currentLanguage = isFrench ? 'en' : 'fr';
+                
+                // Toggle language classes
+                document.querySelectorAll('.lang-fr').forEach(el => {
+                    el.classList.toggle('hidden');
+                });
+                
+                document.querySelectorAll('.lang-en').forEach(el => {
+                    el.classList.toggle('hidden');
+                });
+                
+                // Toggle body class for CSS targeting
+                if (isFrench) {
+                    document.body.classList.add('english-mode');
+                } else {
+                    document.body.classList.remove('english-mode');
+                }
+                
+                // Update typewriter text
+                this.typewriter.currentText = 0;
+                this.typewriter.currentChar = 0;
+                this.typewriter.isDeleting = false;
+            }
+            
+            toggleTheme() {
+                const isDark = this.currentTheme === 'dark';
+                this.currentTheme = isDark ? 'light' : 'dark';
+                
+                // Toggle theme
+                if (isDark) {
+                    document.body.classList.add('light-mode');
+                    document.querySelector('#theme-toggle i').className = 'fas fa-sun text-yellow-500';
+                } else {
+                    document.body.classList.remove('light-mode');
+                    document.querySelector('#theme-toggle i').className = 'fas fa-moon text-gray-300';
+                }
+            }
+            
+            initNavbarScroll() {
+                const header = document.querySelector('header');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+            }
+            
+            initSectionHighlighting() {
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.nav-link');
+                
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const id = entry.target.getAttribute('id');
+                                navLinks.forEach(link => {
+                                    link.classList.remove('active');
+                                    if (link.getAttribute('href') === `#${id}`) {
+                                        link.classList.add('active');
+                                    }
+                                });
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.3,
+                        rootMargin: '-100px 0px -50% 0px'
+                    }
+                );
+                
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+            
+            initAnimations() {
+                // GSAP animations for sections
+                gsap.utils.toArray('section').forEach((section, i) => {
+                    gsap.from(section, {
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 85%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse',
+                            once: true
+                        },
+                        opacity: 0,
+                        y: 80,
+                        duration: 1.2,
+                        delay: i * 0.2,
+                        ease: 'power3.out'
+                    });
+                });
+                
+                // Hero animations
+                gsap.from('#presentation h1 span', {
+                    duration: 1.8,
+                    opacity: 0,
+                    y: 50,
+                    stagger: 0.4,
+                    ease: 'power3.out'
+                });
+                
+                // Animate profile picture
+                gsap.from('.profile-pic', {
+                    duration: 2,
+                    opacity: 0,
+                    scale: 0.5,
+                    rotate: 180,
+                    ease: 'elastic.out(1, 0.5)'
+                });
+            }
+            
+            initRevealOnScroll() {
+                const revealElements = document.querySelectorAll('.reveal-on-scroll');
+                
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.1,
+                        rootMargin: '0px 0px -100px 0px'
+                    }
+                );
+                
+                revealElements.forEach(element => {
+                    observer.observe(element);
+                });
+            }
+            
+            animateSkillCards() {
+                const skillWrappers = document.querySelectorAll('.skill-card-wrapper');
+                
+                skillWrappers.forEach((wrapper, index) => {
+                    gsap.to(wrapper, {
+                        scrollTrigger: {
+                            trigger: '#competences',
+                            start: 'top 80%',
+                            toggleActions: 'play none none reverse',
+                            once: true
+                        },
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        rotationX: 0,
+                        duration: 1,
+                        delay: index * 0.05,
+                        ease: 'back.out(1.7)',
+                        onComplete: () => {
+                            wrapper.classList.add('animated');
+                        }
+                    });
+                });
+            }
+            
+            createParticleEffect(element) {
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = centerX + 'px';
+                    particle.style.top = centerY + 'px';
+                    particle.style.background = getComputedStyle(element).color || '#6C63FF';
+                    
+                    document.body.appendChild(particle);
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 50 + Math.random() * 50;
+                    const targetX = centerX + Math.cos(angle) * distance;
+                    const targetY = centerY + Math.sin(angle) * distance;
+                    
+                    gsap.to(particle, {
+                        x: targetX - centerX,
+                        y: targetY - centerY,
+                        opacity: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                        onComplete: () => {
+                            particle.remove();
+                        }
+                    });
+                }
+            }
+            
+            handleResize() {
+                // Handle responsive adjustments
+                if (window.innerWidth < 768) {
+                    // Mobile adjustments
+                }
+            }
+        }
+        
+        // Initialize portfolio
+        document.addEventListener('DOMContentLoaded', () => {
+            new PortfolioManager();
+        });
+    </script>
+</body>
+</html>
