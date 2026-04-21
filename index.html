@@ -17,8 +17,8 @@
                         dark: '#0A0A0F',
                         darker: '#050508',
                         light: '#F0F0F3',
-                        'light-bg': '#F8FAFC',
-                        'light-text': '#1E293B',
+                        'light-bg': '#E8E6E3',
+                        'light-text': '#334155',
                         'light-gray': '#64748B',
                     },
                     animation: {
@@ -92,15 +92,16 @@
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             
-            /* Mode clair amélioré avec plus de contraste */
-            --light-bg: #F5F7FA;
-            --light-card: #FFFFFF;
-            --light-text: #1A202C;
-            --light-gray: #4A5568;
-            --light-border: #E2E8F0;
-            --light-shadow: rgba(0, 0, 0, 0.08);
-            --light-glass-bg: rgba(255, 255, 255, 0.85);
-            --light-glass-border: rgba(226, 232, 240, 0.8);
+            /* Mode clair adouci (moins de blanc pur, moins de contraste dur) */
+            --light-bg: #E8E6E3;
+            --light-bg-mid: #E0DDD8;
+            --light-card: #F0EEEB;
+            --light-text: #334155;
+            --light-gray: #64748B;
+            --light-border: #C9C4BC;
+            --light-shadow: rgba(0, 0, 0, 0.06);
+            --light-glass-bg: rgba(240, 238, 235, 0.92);
+            --light-glass-border: rgba(180, 175, 168, 0.45);
         }
 
         body {
@@ -113,7 +114,7 @@
         }
 
         body.light-mode {
-            background-color: var(--light-bg);
+            background: linear-gradient(165deg, var(--light-bg) 0%, var(--light-bg-mid) 55%, #D8D4CE 100%);
             color: var(--light-text);
         }
 
@@ -134,7 +135,7 @@
         }
 
         .light-mode #three-canvas {
-            opacity: 0.4;
+            opacity: 0.22;
         }
 
         /* Navbar améliorée */
@@ -151,10 +152,10 @@
 
         .light-mode header {
             background: linear-gradient(135deg, 
-                rgba(248, 250, 252, 0.98) 0%, 
-                rgba(248, 250, 252, 0.95) 100%);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                rgba(232, 230, 227, 0.97) 0%, 
+                rgba(224, 221, 216, 0.94) 100%);
+            border-bottom: 1px solid rgba(180, 175, 168, 0.35);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
         }
 
         header.scrolled {
@@ -164,9 +165,9 @@
         }
 
         .light-mode header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+            background: rgba(236, 233, 229, 0.97);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+            border-bottom: 1px solid rgba(180, 175, 168, 0.4);
         }
 
         /* Glassmorphism amélioré avec plus de reflets */
@@ -209,21 +210,21 @@
 
         .light-mode .glass {
             background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.92) 0%, 
-                rgba(255, 255, 255, 0.85) 50%, 
-                rgba(255, 255, 255, 0.78) 100%);
-            border: 1px solid rgba(226, 232, 240, 0.9);
+                rgba(244, 242, 239, 0.96) 0%, 
+                rgba(236, 233, 229, 0.92) 50%, 
+                rgba(228, 225, 220, 0.88) 100%);
+            border: 1px solid var(--light-glass-border);
             box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.95),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+                0 10px 36px var(--light-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.04);
         }
 
         .light-mode .glass:hover {
             box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.95),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+                0 16px 44px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.04);
         }
 
         /* Cartes de compétences rondes améliorées */
@@ -261,22 +262,22 @@
 
         .light-mode .skill-card {
             background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.98) 0%, 
-                rgba(255, 255, 255, 0.9) 50%, 
-                rgba(255, 255, 255, 0.85) 100%);
-            border: 2px solid rgba(226, 232, 240, 0.9);
+                rgba(244, 242, 239, 0.98) 0%, 
+                rgba(236, 233, 229, 0.94) 50%, 
+                rgba(228, 225, 220, 0.9) 100%);
+            border: 2px solid rgba(180, 175, 168, 0.4);
             box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.95),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+                0 16px 44px rgba(0, 0, 0, 0.07),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.06);
         }
 
         .light-mode .skill-card:hover {
             box-shadow: 
-                0 30px 70px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.95),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-                0 0 40px rgba(108, 99, 255, 0.1);
+                0 24px 56px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+                0 0 32px rgba(108, 99, 255, 0.08);
         }
 
         /* Effet de brillance circulaire */
@@ -430,6 +431,25 @@
             opacity: 1;
         }
 
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #24292e;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .github-btn:hover {
+            transform: scale(1.05);
+            background-color: #444d56;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
         /* Boutons de contrôle améliorés */
         .control-btn {
             width: 48px;
@@ -497,18 +517,20 @@
 
         .light-mode .control-btn {
             background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.95), 
-                rgba(255, 255, 255, 0.85));
-            border: 1px solid rgba(226, 232, 240, 0.9);
+                rgba(240, 238, 235, 0.95), 
+                rgba(228, 225, 220, 0.9));
+            border: 1px solid rgba(180, 175, 168, 0.45);
             color: var(--light-text);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
         }
 
         .light-mode .control-btn:hover {
-            background: white;
+            background: linear-gradient(135deg, 
+                rgba(248, 246, 243, 0.98), 
+                rgba(236, 233, 229, 0.95));
             box-shadow: 
-                0 8px 25px rgba(0, 0, 0, 0.12),
-                0 0 20px rgba(108, 99, 255, 0.1);
+                0 8px 22px rgba(0, 0, 0, 0.08),
+                0 0 18px rgba(108, 99, 255, 0.08);
         }
 
         /* Animation des cartes de compétences */
@@ -563,13 +585,14 @@
 
         .light-mode .gradient-text {
             background: linear-gradient(90deg, 
-                #7C3AED, 
-                #3B82F6, 
-                #10B981, 
-                #7C3AED);
+                #6D4DC4, 
+                #4F7CAC, 
+                #4A8F7A, 
+                #6D4DC4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: saturate(0.92);
         }
 
         /* Section Spacing */
@@ -630,7 +653,7 @@
         }
 
         .light-mode .nav-link {
-            color: rgba(26, 32, 44, 0.8);
+            color: rgba(51, 65, 85, 0.82);
         }
 
         .nav-link:hover {
@@ -780,15 +803,15 @@
 
         /* Améliorations mode clair */
         .light-mode .text-gray-300 {
-            color: #4A5568;
+            color: #475569;
         }
 
         .light-mode .text-gray-400 {
-            color: #718096;
+            color: #64748B;
         }
 
         .light-mode .text-gray-500 {
-            color: #A0AEC0;
+            color: #78716C;
         }
 
         .light-mode .hover\:bg-white\/5:hover {
@@ -814,16 +837,16 @@
 
         .light-mode input,
         .light-mode textarea {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(244, 242, 239, 0.95);
             border: 1px solid var(--light-border);
             color: var(--light-text);
         }
 
         .light-mode input:focus,
         .light-mode textarea:focus {
-            background: white;
+            background: rgba(248, 246, 243, 0.98);
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
         }
 
         /* Photo de profil avec effets */
@@ -954,7 +977,7 @@
                     <span class="lang-fr">Contact</span>
                     <span class="lang-en hidden">Contact</span>
                 </a>
-                <a href="CV_Abdramane_Diallo_B.pdf" download class="btn-primary">
+                <a href="Diallo_Cv.pdf" download class="btn-primary">
                     <i class="fas fa-download"></i>
                     <span class="lang-fr">Télécharger CV</span>
                     <span class="lang-en hidden">Download CV</span>
@@ -987,15 +1010,15 @@
                 <!-- Informations personnelles -->
                 <div class="lg:w-3/5 lg:pl-12">
                     <div class="mb-10">
-                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-fr">Étudiant en B3 Développeur Data & IA</span>
-                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-en hidden">B3 Data & AI Developer Student</span>
+                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-fr">Alternance Data Analyst / BI / Data Science - Rentrée Septembre 2026</span>
+                        <span class="inline-block px-5 py-2.5 rounded-full glass text-sm mb-5 lang-en hidden">Data Analyst / BI / Data Science Apprenticeship - September 2026 Intake</span>
                         <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
                             <span class="block">Abdramane Diallo</span>
                         </h1>
                         <div class="h-20 mb-8">
                             <h2 class="typewriter text-3xl md:text-4xl font-bold">
-                                <span id="typewriter-text" class="lang-fr">Développeur Data & IA</span>
-                                <span id="typewriter-text-en" class="lang-en hidden">Data & AI Developer</span>
+                                <span id="typewriter-text" class="lang-fr">Data Analyst & BI</span>
+                                <span id="typewriter-text-en" class="lang-en hidden">Data Analyst & BI</span>
                             </h2>
                         </div>
                     </div>
@@ -1005,21 +1028,21 @@
                         <h3 class="text-2xl font-bold mb-8 gradient-text lang-fr">Profil Professionnel</h3>
                         <h3 class="text-2xl font-bold mb-8 gradient-text lang-en hidden">Professional Profile</h3>
                         <p class="text-gray-300 mb-6 lang-fr">
-                            Étudiant passionné en B3 Développeur Data & IA, je me spécialise dans la création de solutions intelligentes 
-                            pour résoudre des problèmes complexes. Mon parcours combine une solide formation théorique avec 
-                            des applications pratiques en machine learning, deep learning et data visualization.
+                            Étudiant en Bachelor 3 Data & IA à l'ECE Paris avec un parcours MIAGE, je suis spécialisé en
+                            analyse de données, data quality et data visualisation. Je maîtrise Python, SQL, Power BI et BigQuery
+                            pour transformer des données brutes en insights exploitables.
                         </p>
                         <p class="text-gray-300 mb-6 lang-en hidden">
-                            Passionate B3 Data & AI Developer student, specializing in creating intelligent solutions 
-                            to solve complex problems. My journey combines solid theoretical training with 
-                            practical applications in machine learning, deep learning, and data visualization.
+                            B3 Data & AI student at ECE Paris with a MIAGE background, specialized in
+                            data analysis, data quality, and data visualization. I use Python, SQL, Power BI, and BigQuery
+                            to turn raw data into actionable insights.
                         </p>
                         <p class="text-gray-300 mb-10 lang-fr">
-                            Je recherche actuellement un stage de fin d'études de 4 à 6 mois, disponible immédiatement à partir du 1er avril, dans le domaine de la Data Science ou de l'Intelligence 
-                            Artificielle pour mettre en pratique mes compétences et contribuer à des projets innovants.
+                            Je recherche une alternance en Data Analyst / BI / Data Science pour septembre 2026.
+                            Prêt à transformer vos données en décisions stratégiques avec une approche orientée impact, fiabilité et performance.
                         </p>
                         <p class="text-gray-300 mb-10 lang-en hidden">
-I am currently seeking a 4 to 6-month end-of-study internship in Data Science or Artificial Intelligence, starting April 1st, 2026. I am eager to apply my technical skills and contribute to innovative, high-impact projects within a professional team.                        </p>
+I am seeking a Data Analyst / BI / Data Science apprenticeship for September 2026. Ready to turn your data into strategic decisions with an impact-driven and quality-focused mindset.                        </p>
                         
                         <!-- Boutons d'action -->
                         <div class="flex flex-wrap gap-5 items-center">
@@ -1027,7 +1050,7 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 <span class="lang-fr">Me contacter</span>
                                 <span class="lang-en hidden">Contact Me</span>
                             </a>
-                            <a href="CV_Abdramane_Diallo_B.pdf" download class="btn-primary">
+                            <a href="Diallo_Cv.pdf" download class="btn-primary">
                                 <i class="fas fa-download"></i>
                                 <span class="lang-fr">Télécharger CV</span>
                                 <span class="lang-en hidden">Download CV</span>
@@ -1039,7 +1062,7 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 <div>
                                     <div class="text-gray-400 text-sm lang-fr">Localisation</div>
                                     <div class="text-gray-400 text-sm lang-en hidden">Location</div>
-                                    <div class="font-medium">Paris, France</div>
+                                    <div class="font-medium">Paris 75013, France</div>
                                 </div>
                             </div>
                         </div>
@@ -1073,7 +1096,7 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                         <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                                 <div>
-                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Bachelor 3 Développeur Data & IA</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Bachelor 3 Data & IA</h3>
                                     <h3 class="text-2xl font-bold mb-3 lang-en hidden">B3 Data & AI Developer</h3>
                                     <div class="flex items-center text-gray-400 mb-3">
                                         <i class="fas fa-university mr-3"></i>
@@ -1116,15 +1139,15 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                         <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                                 <div>
-                                    <h3 class="text-2xl font-bold mb-3 lang-fr">DUT Informatique (Gestion des Entreprises) Diplôme Universitaire de Technologie</h3>
-                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Associate Degree in Computer Science & Business Management Higher National Diploma (DUT)</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Licence MIAGE (Méthodes Informatiques Appliquées à la Gestion des Entreprises)</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Bachelor's Degree in MIAGE (Information Systems for Business Management)</h3>
                                     <div class="flex items-center text-gray-400 mb-3">
                                         <i class="fas fa-university mr-3"></i>
-                                        <span class="lang-fr">Ecole Rationnelle Privée d'Informatique et d'Electronique (ERPIE) - Bamako - Mali</span>
-                                        <span class="lang-en hidden">Private Rational School of Computing and Electronics (ERPIE) - Bamako - Mali</span>
+                                        <span class="lang-fr">École Rationnelle d'Informatique et Électronique - Bamako - Mali</span>
+                                        <span class="lang-en hidden">Rational School of Computer Science and Electronics - Bamako - Mali</span>
                                     </div>
                                 </div>
-                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">2023 - 2025</span>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Octobre 2021 - Juin 2024</span>
                             </div>
                             <p class="text-gray-300 mb-6 lang-fr">
                                 Formation générale en informatique avec des bases solides en :
@@ -1135,8 +1158,8 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                             <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span class="lang-fr">Développement logiciel</span>
-                                    <span class="lang-en hidden">Software development</span>
+                                    <span class="lang-fr">Systèmes d'information</span>
+                                    <span class="lang-en hidden">Information systems</span>
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
@@ -1145,23 +1168,23 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span class="lang-fr">Algorithmique avancée</span>
-                                    <span class="lang-en hidden">Advanced algorithms</span>
+                                    <span class="lang-fr">Développement Web et Mobile</span>
+                                    <span class="lang-en hidden">Web and mobile development</span>
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span class="lang-fr">Architecture des systèmes</span>
-                                    <span class="lang-en hidden">System architecture</span>
+                                    <span class="lang-fr">Optimisation des processus métiers</span>
+                                    <span class="lang-en hidden">Business process optimization</span>
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span class="lang-fr">Mathématiques appliquées, Bases de données</span>
-                                    <span class="lang-en hidden">Applied Mathematics & Databases</span>
+                                    <span class="lang-fr">Bases de données et SQL</span>
+                                    <span class="lang-en hidden">Databases and SQL</span>
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-secondary mr-3"></i>
-                                    <span class="lang-fr">Business : Gestion comptable, Analyse financière, Économie d'entreprise</span>
-                                    <span class="lang-en hidden">Business Intelligence: Accounting, Financial Analysis, Corporate Economics.</span>
+                                    <span class="lang-fr">Gestion et finance d'entreprise</span>
+                                    <span class="lang-en hidden">Business and corporate finance</span>
                                 </li>
                             </ul>
                         </div>
@@ -1172,7 +1195,7 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                         <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                                 <div>
-                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Baccalauréat Sciencetifiques</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Baccalauréat Scientifique</h3>
                                     <h3 class="text-2xl font-bold mb-3 lang-en hidden">Scientific Baccalaureate</h3>
                                     <div class="flex items-center text-gray-400 mb-3">
                                         <i class="fas fa-school mr-3"></i>
@@ -1226,50 +1249,45 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                         <div class="glass rounded-2xl p-8 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/30">
                             <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                                 <div>
-                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Stage Data Analyst</h3>
-                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Data Analyst Intern</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-fr">Stagiaire SI & Maintenance Informatique</h3>
+                                    <h3 class="text-2xl font-bold mb-3 lang-en hidden">Information Systems & IT Maintenance Intern</h3>
                                     <div class="flex items-center text-gray-400 mb-3">
                                         <i class="fas fa-building mr-3"></i>
-                                        <span class="lang-fr">AFG Assurances - Bamako - Mali</span>
-                                        <span class="lang-en hidden">AFG Assurances - Bamako - Mali</span>
+                                        <span class="lang-fr">Direction des Finances et du Matériel (DFM), Ministère de l'Agriculture - Bamako - Mali</span>
+                                        <span class="lang-en hidden">Directorate of Finance and Equipment (DFM), Ministry of Agriculture - Bamako - Mali</span>
                                     </div>
                                 </div>
-                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Février 2025 - Juin 2025</span>
+                                <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Septembre 2024 - Janvier 2025</span>
                             </div>
-                            <p class="text-gray-300 mb-6 lang-fr">Stage de 5 mois</p>
-                            <p class="text-gray-300 mb-6 lang-en hidden">5-month internship</p>
+                            <p class="text-gray-300 mb-6 lang-fr">Stage de 4 mois</p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">4-month internship</p>
                             <ul class="space-y-3">
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Analyse de Sinistralité : Exploration des données clients, primes et sinistres pour identifier les tendances de marché et les facteurs de risque</span>
-                                    <span class="lang-en hidden">Claims Analysis: In-depth exploration of customer data, premiums, and claims to identify market trends and emerging risk factors</span>
+                                    <span class="lang-fr">Conception d'une application de gestion d'archives numériques pour digitaliser les pièces comptables et fluidifier les flux documentaires</span>
+                                    <span class="lang-en hidden">Designed a digital archive management application to digitize accounting records and streamline document workflows</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Modélisation Statistique : Développement de modèles prédictifs pour l'estimation des provisions techniques et l'anticipation des comportements assurés.</span>
-                                    <span class="lang-en hidden">Statistical Modeling: Designed and developed predictive models to estimate technical reserves and anticipate policyholder behavior</span>
+                                    <span class="lang-fr">Structuration, fiabilisation et optimisation des flux de données internes</span>
+                                    <span class="lang-en hidden">Structured, improved reliability, and optimized internal data flows</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Évaluation de la Performance : Optimisation de la fiabilité des modèles via des métriques rigoureuses (Précision, Rappel, F1-score).</span>
-                                    <span class="lang-en hidden">Performance Evaluation: Monitored model reliability using rigorous accuracy metrics (Precision, Recall, F1-score) to ensure forecast integrity.</span>
+                                    <span class="lang-fr">Maintenance du parc informatique (hardware/software) et support des utilisateurs</span>
+                                    <span class="lang-en hidden">Maintained IT infrastructure (hardware/software) and provided user support</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Data Visualisation : Création de tableaux de bord interactifs (Power BI) pour le suivi des indicateurs clés de performance (KPI).</span>
-                                    <span class="lang-en hidden">Data Visualization: Designed and deployed interactive Power BI dashboards to translate complex data into visual Key Performance Indicators (KPIs).</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Aide à la Décision : Traduction d'analyses complexes en recommandations stratégiques pour la direction afin d'optimiser la rentabilité.</span>
-                                    <span class="lang-en hidden">Decision Support: Interpreted statistical analyses to provide strategic recommendations to executive management and optimize profitability.</span>
+                                    <span class="lang-fr">Gestion et support du réseau Internet/Intranet pour assurer la continuité des opérations</span>
+                                    <span class="lang-en hidden">Managed Internet/Intranet network support to ensure operational continuity</span>
                                 </li>
                             </ul>
                             <div class="flex flex-wrap gap-3 mt-6">
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Python</span>
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Scikit-learn</span>
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">SQL</span>
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Power BI</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Systèmes d'information</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Data Quality</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Réseaux</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Maintenance IT</span>
                             </div>
                         </div>
                     </div>
@@ -1289,22 +1307,22 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 </div>
                                 <span class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 text-secondary text-sm font-semibold mt-3 md:mt-0">Mars 2024 - Août 2024</span>
                             </div>
-                            <p class="text-gray-300 mb-6 lang-fr">Stage de 5 mois en développement web</p>
-                            <p class="text-gray-300 mb-6 lang-en hidden">5-month web development internship</p>
+                            <p class="text-gray-300 mb-6 lang-fr">Mission de 6 mois en développement web full-stack</p>
+                            <p class="text-gray-300 mb-6 lang-en hidden">6-month full-stack web development role</p>
                             <ul class="space-y-3">
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Développement d'une application web</span>
+                                    <span class="lang-fr">Développement d'applications web full-stack</span>
                                     <span class="lang-en hidden">Web application development</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Implémentation d'algorithmes de recommandation basiques</span>
+                                    <span class="lang-fr">Implémentation d'algorithmes de recommandation pour améliorer l'expérience utilisateur</span>
                                     <span class="lang-en hidden">Implementation of basic recommendation algorithms</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-check text-secondary mt-1.5 mr-3"></i>
-                                    <span class="lang-fr">Implémentation de fonctionnalités back-end API (logique métier)</span>
+                                    <span class="lang-fr">Développement de fonctionnalités back-end via API REST</span>
                                     <span class="lang-en hidden">Implementation of back-end API features (business logic)</span>
                                 </li>
                                 <li class="flex items-start">
@@ -1315,8 +1333,8 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                             </ul>
                             <div class="flex flex-wrap gap-3 mt-6">
                                 <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">JavaScript</span>
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">React</span>
-                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Node.js</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Vue 3</span>
+                                <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Laravel</span>
                                 <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">MySQL</span>
                                 <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 text-secondary text-sm">Power BI</span>
 
@@ -1577,27 +1595,6 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                 </div>
             </div>
 
-            <style>
-                /* À placer idéalement dans ton fichier CSS global */
-                .github-btn {
-                    display: inline-flex;
-                    align-items: center;
-                    background-color: #24292e;
-                    color: white;
-                    padding: 10px 20px;
-                    border-radius: 8px;
-                    text-decoration: none;
-                    font-weight: 500;
-                    font-size: 0.875rem;
-                    transition: all 0.3s ease;
-                }
-
-                .github-btn:hover {
-                    transform: scale(1.05);
-                    background-color: #444d56;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                }
-            </style>
                     <!--projet 2--> 
                     <div class="glass rounded-2xl overflow-hidden group cursor-pointer transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-accent/40 reveal-on-scroll">
                     <div class="relative h-56 overflow-hidden">
@@ -1641,24 +1638,6 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                     </div>
                 </div>
 
-                <style>
-                    /* À inclure une seule fois dans votre fichier CSS principal */
-                    .github-btn {
-                        display: inline-flex;
-                        align-items: center;
-                        background-color: #24292e;
-                        color: white;
-                        padding: 10px 22px;
-                        border-radius: 8px;
-                        text-decoration: none;
-                        font-weight: 500;
-                        transition: all 0.3s ease;
-                    }
-                    .github-btn:hover {
-                        transform: scale(1.05);
-                        background-color: #444d56;
-                    }
-                </style>
                     <!--projet 3--> 
                    <div class="glass rounded-2xl overflow-hidden group cursor-pointer transform transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-green-500/40 reveal-on-scroll">
                     <div class="relative h-56 overflow-hidden">
@@ -1709,8 +1688,8 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
             <div class="glass rounded-3xl p-10 md:p-14 max-w-5xl mx-auto">
                 <div class="text-center mb-14">
                     <h2 class="text-5xl md:text-6xl font-bold mb-6">Contact</h2>
-                    <p class="text-gray-400 text-lg lang-fr">Disponible pour des opportunités de stage et projets</p>
-                    <p class="text-gray-400 text-lg lang-en hidden">Available for internship and project opportunities</p>
+                    <p class="text-gray-400 text-lg lang-fr">Disponible pour une alternance en Data Analyst / BI / Data Science - Septembre 2026</p>
+                    <p class="text-gray-400 text-lg lang-en hidden">Available for a Data Analyst / BI / Data Science apprenticeship - September 2026</p>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -1735,7 +1714,17 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 <div>
                                     <div class="text-gray-400 lang-fr">Localisation</div>
                                     <div class="text-gray-400 lang-en hidden">Location</div>
-                                    <div class="font-medium text-lg">Paris, France</div>
+                                    <div class="font-medium text-lg">Paris 75013, France</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-5">
+                                <div class="w-14 h-14 rounded-full glass flex items-center justify-center">
+                                    <i class="fas fa-phone text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 lang-fr">Téléphone</div>
+                                    <div class="text-gray-400 lang-en hidden">Phone</div>
+                                    <div class="font-medium text-lg">+33 7 46 26 99 57</div>
                                 </div>
                             </div>
                         </div>
@@ -1744,7 +1733,7 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                             <h4 class="text-2xl font-bold mb-6 lang-fr">Réseaux sociaux</h4>
                             <h4 class="text-2xl font-bold mb-6 lang-en hidden">Social Networks</h4>
                             <div class="flex space-x-5">
-                                <a href="https://github.com/AbdramaneDiallo777" target="_blank" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
+                                <a href="https://github.com/bypass7734" target="_blank" rel="noopener noreferrer" title="GitHub" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
                                     <i class="devicon-github-plain text-2xl"></i>
                                 </a>
                                 <a href="https://www.linkedin.com/in/abdramane-diallo-a41020382/" target="_blank" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:shadow-primary/30">
@@ -1752,6 +1741,12 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                                 </a>
                                 
                             </div>
+                            <p class="mt-6 text-sm text-gray-500 lang-fr">
+                                <a href="https://github.com/bypass7734/Portofolio" target="_blank" rel="noopener noreferrer" class="text-secondary hover:underline">Code source de ce portfolio</a>
+                            </p>
+                            <p class="mt-6 text-sm text-gray-500 lang-en hidden">
+                                <a href="https://github.com/bypass7734/Portofolio" target="_blank" rel="noopener noreferrer" class="text-secondary hover:underline">Portfolio source code</a>
+                            </p>
                         </div>
                     </div>
                     
@@ -1803,14 +1798,14 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
             <div class="glass rounded-3xl p-10 mb-10">
                 <h3 class="text-3xl font-bold mb-6 lang-fr">Disponible pour des opportunités</h3>
                 <h3 class="text-3xl font-bold mb-6 lang-en hidden">Available for opportunities</h3>
-                <p class="text-gray-400 mb-8 text-lg lang-fr">Je recherche un stage de fin d'études en Data Science ou Intelligence Artificielle</p>
-                <p class="text-gray-400 mb-8 text-lg lang-en hidden">I am looking for an end-of-study internship in Data Science or Artificial Intelligence</p>
+                <p class="text-gray-400 mb-8 text-lg lang-fr">À la recherche d'une alternance en Data Analyst / BI / Data Science pour septembre 2026</p>
+                <p class="text-gray-400 mb-8 text-lg lang-en hidden">Looking for a Data Analyst / BI / Data Science apprenticeship for September 2026</p>
                 <div class="flex flex-wrap justify-center gap-5">
                     <a href="#contact" class="btn-primary px-10">
                         <span class="lang-fr">Me contacter</span>
                         <span class="lang-en hidden">Contact me</span>
                     </a>
-                    <a href="CV_Abdramane_Diallo_B.pdf" download class="btn-primary">
+                    <a href="Diallo_Cv.pdf" download class="btn-primary">
                         <i class="fas fa-download"></i>
                         <span class="lang-fr">Télécharger CV</span>
                         <span class="lang-en hidden">Download CV</span>
@@ -1818,6 +1813,10 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                 </div>
             </div>
             <p class="text-gray-400">© <span id="current-year">2026</span> Abdramane Diallo - Portfolio Data & IA. Tous droits réservés.</p>
+            <p class="text-gray-500 text-sm mt-3">
+                <a href="https://github.com/bypass7734/Portofolio" target="_blank" rel="noopener noreferrer" class="text-secondary/90 hover:underline lang-fr">Dépôt GitHub</a>
+                <a href="https://github.com/bypass7734/Portofolio" target="_blank" rel="noopener noreferrer" class="text-secondary/90 hover:underline lang-en hidden">GitHub repository</a>
+            </p>
         </div>
     </footer>
 
@@ -1839,8 +1838,6 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                 });
                 
                 this.particles = null;
-                this.mouse = { x: 0, y: 0 };
-                this.mouseStrength = 0.02;
                 this.initialize();
             }
             
@@ -1889,11 +1886,6 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                 pointLight.position.set(15, 15, 15);
                 this.scene.add(pointLight);
                 
-                window.addEventListener('mousemove', (e) => {
-                    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-                    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-                });
-                
                 window.addEventListener('resize', () => this.onWindowResize());
                 this.animate();
             }
@@ -1910,9 +1902,6 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                 if (this.particles) {
                     this.particles.rotation.x += 0.0015;
                     this.particles.rotation.y += 0.0025;
-                    this.particles.rotation.y += this.mouse.x * this.mouseStrength;
-                    this.particles.rotation.x += this.mouse.y * this.mouseStrength;
-                    
                     const positions = this.particles.geometry.attributes.position.array;
                     for (let i = 0; i < positions.length; i += 3) {
                         positions[i + 1] += Math.sin(Date.now() * 0.001 + i) * 0.002;
@@ -1928,18 +1917,18 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
         class TypeWriter {
             constructor() {
                 this.textsFr = [
-                    "Développeur Data & IA",
-                    "Spécialiste Machine Learning", 
+                    "Data Analyst & BI",
+                    "Spécialiste Data Quality", 
                     "Data Scientist",
-                    "Deep Learning Engineer",
-                    "AI Solutions Architect"
+                    "Analyste de données",
+                    "Power BI & SQL"
                 ];
                 this.textsEn = [
-                    "Data & AI Developer",
-                    "Machine Learning Specialist",
+                    "Data Analyst & BI",
+                    "Data Quality Specialist",
                     "Data Scientist",
-                    "Deep Learning Engineer",
-                    "AI Solutions Architect"
+                    "Data Analyst",
+                    "Power BI & SQL"
                 ];
                 this.currentText = 0;
                 this.currentChar = 0;
@@ -2060,14 +2049,14 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                     });
                 });
                 
-                // Contact form
+                // Contact form - envoi réel via Web3Forms
                 const contactForm = document.getElementById('contact-form');
-                contactForm.addEventListener('submit', (e) => {
+                contactForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    
+
                     const inputs = contactForm.querySelectorAll('input[required], textarea[required]');
                     let isValid = true;
-                    
+
                     inputs.forEach(input => {
                         if (!input.value.trim()) {
                             isValid = false;
@@ -2078,24 +2067,45 @@ I am currently seeking a 4 to 6-month end-of-study internship in Data Science or
                             input.style.boxShadow = '';
                         }
                     });
-                    
-                    if (isValid) {
-                        const button = contactForm.querySelector('button');
-                        const originalText = button.innerHTML;
-                        
-                        const successTextFr = '<i class="fas fa-check mr-3"></i> Message envoyé !';
-                        const successTextEn = '<i class="fas fa-check mr-3"></i> Message sent!';
-                        const isFrench = this.currentLanguage === 'fr';
-                        
-                        button.innerHTML = isFrench ? successTextFr : successTextEn;
-                        button.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-                        button.disabled = true;
-                        
+
+                    if (!isValid) return;
+
+                    const button = contactForm.querySelector('button');
+                    const originalText = button.innerHTML;
+                    const isFrench = this.currentLanguage === 'fr';
+                    const sendingTextFr = '<i class="fas fa-spinner fa-spin mr-3"></i> Envoi en cours...';
+                    const sendingTextEn = '<i class="fas fa-spinner fa-spin mr-3"></i> Sending...';
+                    const successTextFr = '<i class="fas fa-check mr-3"></i> Message envoyé !';
+                    const successTextEn = '<i class="fas fa-check mr-3"></i> Message sent!';
+                    const errorTextFr = '<i class="fas fa-triangle-exclamation mr-3"></i> Envoi impossible';
+                    const errorTextEn = '<i class="fas fa-triangle-exclamation mr-3"></i> Send failed';
+
+                    button.innerHTML = isFrench ? sendingTextFr : sendingTextEn;
+                    button.disabled = true;
+
+                    try {
+                        const formData = new FormData(contactForm);
+                        const response = await fetch(contactForm.action, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const result = await response.json();
+
+                        if (response.ok && result.success) {
+                            button.innerHTML = isFrench ? successTextFr : successTextEn;
+                            button.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+                            contactForm.reset();
+                        } else {
+                            throw new Error(result.message || 'Web3Forms error');
+                        }
+                    } catch (error) {
+                        button.innerHTML = isFrench ? errorTextFr : errorTextEn;
+                        button.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    } finally {
                         setTimeout(() => {
                             button.innerHTML = originalText;
                             button.style.background = '';
                             button.disabled = false;
-                            contactForm.reset();
                         }, 3000);
                     }
                 });
